@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crescora Capital · Crece ahora</title>
+<meta name="description" content="Aprende a ahorrar e invertir desde cero. Lecciones, herramientas y una newsletter semanal para jóvenes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#0f1f3a; --green-2:#1d3a68; --green-soft:#e8ecf3;
+  --cream:#f6f3ec; --paper:#ffffff; --ink:#141b27; --muted:#5a6375;
+  --gold:#b8913f; --line:#e2ddd2; --radius:16px;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(15,31,58,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;font-size:16px}
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif;line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(2.1rem,5vw,3.4rem)} h2{font-size:clamp(1.6rem,3.5vw,2.2rem)} h3{font-size:1.25rem}
+p{margin:0 0 1em} a{color:var(--green)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+.btn{display:inline-block;background:var(--green);color:#fff;border:0;border-radius:6px;padding:.8em 1.4em;font:600 1rem Inter,sans-serif;cursor:pointer;text-decoration:none;transition:.15s}
+.btn:hover{background:var(--green-2)} .btn.ghost{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+.btn.small{padding:.5em 1em;font-size:.9rem}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:24px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:20px} .g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))} .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.tag{display:inline-block;color:var(--gold);font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:0;border-bottom:1.5px solid var(--gold)}
+.muted{color:var(--muted)} .center{text-align:center}
+section.page{display:none;padding:48px 0 72px} section.page.active{display:block}
+
+/* header */
+header{position:sticky;top:0;z-index:10;background:rgba(246,243,236,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-family:"Playfair Display",serif;font-weight:700;font-size:1.3rem;letter-spacing:.16em;color:var(--green);text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo svg{width:38px;height:38px}
+.lw{display:flex;flex-direction:column;line-height:1}.lw small{font-family:Inter,sans-serif;font-size:.58rem;letter-spacing:.42em;color:var(--gold);margin-top:5px;font-weight:600}
+.links{display:flex;gap:4px;align-items:center}
+.links a{text-decoration:none;color:var(--ink);padding:.45em .8em;border-radius:999px;font-weight:500;font-size:.95rem}
+.links a.on,.links a:hover{background:var(--green-soft);color:var(--green)}
+.menu-btn{display:none;background:none;border:0;font-size:1.6rem;cursor:pointer;color:var(--green)}
+@media(max-width:820px){
+  .menu-btn{display:block}
+  .links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--cream);padding:12px 16px 20px;border-bottom:1px solid var(--line);align-items:stretch}
+  .links.open{display:flex}
+}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+@media(max-width:820px){.hero{grid-template-columns:1fr}}
+.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:34em}
+.sub-form{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.sub-form input{flex:1;min-width:200px;padding:.8em 1.1em;border-radius:6px;border:1.5px solid var(--line);font:1rem Inter,sans-serif;background:#fff}
+.sub-form input:focus{outline:2px solid var(--green-2);border-color:transparent}
+.form-msg{font-size:.9rem;margin-top:8px;color:var(--green);min-height:1.2em}
+.hero-card{background:var(--green);color:#fff;border-radius:12px;border-top:4px solid var(--gold);padding:28px;box-shadow:var(--shadow)}
+.hero-card .big{font-family:"Playfair Display",serif;font-size:2.6rem;font-weight:700;color:#d9b56a}
+.feature .ico{font-size:1.6rem;margin-bottom:8px}
+
+/* lessons */
+.progress{height:10px;background:var(--line);border-radius:999px;overflow:hidden;margin:12px 0 4px}
+.progress div{height:100%;background:var(--green-2);width:0;transition:.4s}
+.lesson-list{display:grid;gap:12px;margin-top:24px}
+.lesson-item{display:flex;align-items:center;gap:16px;text-decoration:none;color:inherit}
+.lesson-item .num{flex:0 0 44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--green-soft);color:var(--green);font-weight:700}
+.lesson-item.done .num{background:var(--green);color:#fff}
+.lesson-item.locked{opacity:.55;pointer-events:none}
+.lesson-body{max-width:720px;margin:0 auto}
+.lesson-body h2{margin-top:1.4em}
+.callout{background:var(--green-soft);border-left:4px solid var(--green);padding:14px 18px;border-radius:10px;margin:1.2em 0}
+.callout.gold{background:#faf0dc;border-color:var(--gold)}
+.quiz{margin-top:32px}
+.quiz .q{margin-bottom:18px}
+.quiz label{display:block;padding:10px 14px;border:1.5px solid var(--line);border-radius:10px;margin:6px 0;cursor:pointer;background:#fff}
+.quiz label:hover{border-color:var(--green-2)}
+.quiz input{margin-right:8px}
+.quiz label.ok{border-color:var(--green);background:var(--green-soft)}
+.quiz label.ko{border-color:#c0533d;background:#fbe9e5}
+.lesson-nav{display:flex;justify-content:space-between;gap:12px;margin-top:32px;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse;margin:1em 0;font-size:.95rem}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)} th{color:var(--green)}
+
+/* tools */
+.tool-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.tool-tabs button{background:var(--paper);border:1.5px solid var(--line);border-radius:6px;padding:.55em 1.1em;font:600 .95rem Inter,sans-serif;cursor:pointer;color:var(--ink)}
+.tool-tabs button.on{background:var(--green);border-color:var(--green);color:#fff}
+.tool{display:none} .tool.on{display:block}
+.fields{display:grid;gap:14px}
+.fields label{font-weight:500;font-size:.92rem;display:block}
+.fields input{width:100%;padding:.7em .9em;border-radius:10px;border:1.5px solid var(--line);font:1rem Inter,sans-serif;margin-top:4px;background:#fff}
+.result{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--cream);border-radius:12px;padding:14px}
+.stat small{color:var(--muted);display:block;font-size:.8rem}
+.stat b{font-family:"Playfair Display",serif;font-size:1.5rem;color:var(--green)}
+.stat.gold b{color:var(--gold)}
+.chart{width:100%;height:auto;display:block}
+.legend{display:flex;gap:16px;font-size:.85rem;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.bars{display:grid;gap:10px;margin-top:8px}
+.bar-row{display:grid;grid-template-columns:120px 1fr 90px;align-items:center;gap:10px;font-size:.92rem}
+.bar-row .track{background:var(--cream);border-radius:999px;height:14px;overflow:hidden}
+.bar-row .fill{height:100%;border-radius:999px}
+
+/* glossary */
+.search{width:100%;padding:.8em 1.1em;border-radius:6px;border:1.5px solid var(--line);font:1rem Inter,sans-serif;margin:16px 0 24px;background:#fff}
+.term h3{font-size:1.1rem;margin-bottom:.2em;color:var(--green)}
+
+/* newsletter band */
+.band{background:var(--green);color:#fff;border-radius:12px;border-top:4px solid var(--gold);padding:36px;margin-top:56px}
+.band h2{color:#fff} .band p{color:#c3cde0}
+.band .sub-form input{border-color:transparent}
+.band .btn{background:var(--gold);color:#fff} .band .form-msg{color:#d9b56a}
+
+/* new blocks */
+.section{margin-top:80px}
+.eyebrow{display:table;margin:0 0 10px}.center .eyebrow{margin:0 auto 10px}
+.time{display:grid;grid-template-columns:1fr 1.2fr;gap:32px;align-items:center}
+@media(max-width:820px){.time{grid-template-columns:1fr}}
+.person{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--line)}
+.person:last-child{border-bottom:0}
+.dot{flex:0 0 14px;height:14px;border-radius:50%;margin-top:6px}
+.person b.n{font-family:"Playfair Display",serif;font-size:1.6rem;display:block;line-height:1.2}
+.big-quote{font-family:"Playfair Display",serif;font-size:clamp(1.4rem,3vw,1.9rem);line-height:1.3;color:var(--green);border-left:4px solid var(--gold);padding-left:20px;margin:28px 0 0}
+.steps{counter-reset:st;display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.step{position:relative;padding-top:58px}
+.step:before{counter-increment:st;content:counter(st);position:absolute;top:22px;left:24px;font-family:"Playfair Display",serif;font-weight:700;font-size:1.1rem;color:#fff;background:var(--green);width:30px;height:30px;border-radius:50%;display:grid;place-items:center}
+.plan{display:flex;flex-direction:column}
+.plan ul{padding-left:0;list-style:none;flex:1}
+.plan li{padding:7px 0 7px 28px;position:relative;border-bottom:1px dashed var(--line)}
+.plan li:before{content:"✓";position:absolute;left:4px;color:var(--gold);font-weight:700}
+.plan.feat{border:2px solid var(--green);position:relative}
+.ribbon{position:absolute;top:-13px;right:20px;background:var(--gold);color:#fff;font-size:.75rem;font-weight:600;letter-spacing:.1em;padding:4px 10px;border-radius:4px;text-transform:uppercase}
+.price{font-family:"Playfair Display",serif;font-size:2.6rem;font-weight:700;color:var(--green);line-height:1.1}
+.price small{font-family:Inter,sans-serif;font-size:1rem;color:var(--muted);font-weight:400}
+.toggle{display:inline-flex;background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:4px;margin:20px 0}
+.toggle button{border:0;background:none;padding:.5em 1.1em;border-radius:6px;font:600 .92rem Inter,sans-serif;cursor:pointer;color:var(--muted)}
+.toggle button.on{background:var(--green);color:#fff}
+.month{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.month .card small{color:var(--gold);font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:.75rem}
+.cmp td:nth-child(2),.cmp td:nth-child(3),.cmp th:nth-child(2),.cmp th:nth-child(3){text-align:center;width:110px}
+.cmp .y{color:var(--gold);font-weight:700}.cmp .no{color:#b9b3a6}
+.preview{position:relative;overflow:hidden}
+.preview table{font-size:.88rem}
+.preview .fade{position:absolute;inset:auto 0 0 0;height:65%;background:linear-gradient(transparent,var(--paper) 70%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:20px}
+details{border-bottom:1px solid var(--line);padding:16px 0}
+summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between}
+summary:after{content:"+";color:var(--gold);font-size:1.3rem;line-height:1}
+details[open] summary:after{content:"–"}
+details p{margin:10px 0 0;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:32px 0;font-size:.88rem;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.disclaimer{font-size:.85rem;color:var(--muted);margin-top:24px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#inicio" class="logo" aria-label="Crescora Capital inicio"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4A20 20 0 1 0 24 44V34A10 10 0 1 1 24 14Z" fill="#0f1f3a"/><path d="M28 34H44V14Z" fill="#b8913f"/></svg><span class="lw">CRESCORA<small>CAPITAL</small></span></a>
+    <button class="menu-btn" aria-label="Abrir menú" onclick="document.querySelector('.links').classList.toggle('open')">☰</button>
+    <nav class="links">
+      <a href="#inicio" data-r="inicio">Inicio</a>
+      <a href="#aprende" data-r="aprende">Empieza aquí</a>
+      <a href="#herramientas" data-r="herramientas">Herramientas</a>
+      <a href="#glosario" data-r="glosario">Glosario</a>
+      <a href="#premium" data-r="premium">Premium</a>
+      <a href="#sobre" data-r="sobre">Sobre mí</a>
+      <a href="#suscribir" class="btn small" style="color:#fff">Suscríbete</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ============ INICIO ============ -->
+<section class="page" id="p-inicio">
+  <div class="hero">
+    <div>
+      <span class="tag">Educación financiera para jóvenes</span>
+      <h1>Crece ahora.<br>Aprende a ahorrar e invertir desde cero.</h1>
+      <p class="lead">Finanzas claras para jóvenes: cómo ahorrar con poco, qué son los fondos indexados y los ETFs, y cómo hacer que el tiempo trabaje para ti. Sin tecnicismos y sin venderte nada.</p>
+      <form class="sub-form" onsubmit="return subscribe(this)">
+        <input type="email" required placeholder="tu@email.com" aria-label="Email">
+        <button class="btn">Suscribirme gratis</button>
+      </form>
+      <div class="form-msg"></div>
+      <p class="muted" style="font-size:.88rem">Newsletter gratuita · 5 minutos a la semana · Te das de baja cuando quieras.</p>
+    </div>
+    <div class="hero-card">
+      <p style="margin:0;color:#c3cde0">Si ahorras <b style="color:#fff">50 € al mes</b> desde los 20 años…</p>
+      <div class="big" id="hero-num">—</div>
+      <p style="color:#c3cde0;font-size:.9rem">…podrías tener esto a los 60, con una rentabilidad media del 6 % anual. Solo habrías aportado <b style="color:#fff">24.000 €</b>.</p>
+      <a href="#herramientas" class="btn small" style="background:#d9b56a;color:var(--ink)">Haz tu cálculo →</a>
+      <p style="font-size:.75rem;color:#8e9bb5;margin:12px 0 0">Ejemplo ilustrativo. Las rentabilidades pasadas no garantizan rentabilidades futuras.</p>
+    </div>
+  </div>
+
+  <!-- TIEMPO -->
+  <div class="section card" style="padding:36px">
+    <div class="time">
+      <div>
+        <span class="tag eyebrow">Tu gran ventaja</span>
+        <h2>Tu ventaja no es el dinero.<br>Es el tiempo.</h2>
+        <p class="muted">Con 20 años casi nadie tiene mucho dinero. Pero tienes algo que ningún millonario puede comprar: <b>décadas por delante</b> para que el interés compuesto trabaje por ti.</p>
+        <div class="person"><span class="dot" style="background:var(--gold)"></span><div><b>Ana</b> ahorra 50 €/mes <b>de los 20 a los 30</b> y después no aporta nada más.<br><small class="muted">Aporta 6.000 € en total</small><b class="n" style="color:var(--gold)">≈ 46.700 € a los 60</b></div></div>
+        <div class="person"><span class="dot" style="background:var(--green)"></span><div><b>Juan</b> empieza a los 30 y ahorra 50 €/mes <b>durante 30 años</b>, hasta los 60.<br><small class="muted">Aporta 18.000 € en total</small><b class="n">≈ 48.700 € a los 60</b></div></div>
+      </div>
+      <div>
+        <svg class="chart" id="time-chart" viewBox="0 0 420 260"></svg>
+        <div class="legend"><span><i style="background:#b8913f"></i>Ana (empieza a los 20)</span><span><i style="background:#0f1f3a"></i>Juan (empieza a los 30)</span></div>
+        <p class="big-quote">Ana aporta tres veces menos y acaba casi igual. La diferencia es que empezó antes.</p>
+      </div>
+    </div>
+    <p class="disclaimer">Ejemplo ilustrativo con una rentabilidad constante del 6 % anual y capitalización mensual. En la realidad la rentabilidad varía y puede ser negativa. No incluye impuestos, comisiones ni inflación.</p>
+  </div>
+
+  <!-- CÓMO FUNCIONA -->
+  <div class="section">
+    <span class="tag eyebrow">Cómo funciona</span>
+    <h2>Tres pasos para empezar a crecer</h2>
+    <div class="steps" style="margin-top:20px">
+      <div class="card step"><h3>Suscríbete gratis</h3><p class="muted" style="margin:0">Cada domingo recibes en tu correo un consejo de ahorro y un concepto de inversión, en 5 minutos.</p></div>
+      <div class="card step"><h3>Aprende las bases</h3><p class="muted" style="margin:0">Haz el curso "Empieza aquí" y usa las calculadoras con tus propios números.</p></div>
+      <div class="card step"><h3>Da el salto a Premium</h3><p class="muted" style="margin:0">Cuando quieras ir más allá: comparativas, análisis y datos cada mes por 2,50 €.</p></div>
+    </div>
+  </div>
+
+  <!-- QUÉ TE DAMOS -->
+  <div class="grid g3 section">
+    <div class="card feature"><div class="ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#b8913f" stroke-width="1.6"><path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4zM20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6z"/></svg></div><h3>Lecciones cortas</h3><p class="muted">Un curso gratis de 5 lecciones para entender las bases del ahorro y la inversión.</p><a href="#aprende">Empezar →</a></div>
+    <div class="card feature"><div class="ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#b8913f" stroke-width="1.6"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h3>Herramientas</h3><p class="muted">Calculadoras de interés compuesto, presupuesto y comisiones. Con tus números.</p><a href="#herramientas">Probar →</a></div>
+    <div class="card feature"><div class="ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#b8913f" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 7l9 6 9-6"/></svg></div><h3>Newsletter semanal</h3><p class="muted">Un consejo de ahorro y un concepto de inversión, explicados fácil.</p><a href="#suscribir">Suscribirme →</a></div>
+  </div>
+
+  <!-- PLANES -->
+  <div class="section">
+    <div class="center"><span class="tag eyebrow">Planes</span><h2>Empieza gratis. Sube de nivel cuando quieras.</h2></div>
+    <div class="grid g2" style="max-width:860px;margin:28px auto 0">
+      <div class="card plan">
+        <h3>Gratis</h3><div class="price">0 €</div><p class="muted">Para empezar con buen pie.</p>
+        <ul><li>Newsletter cada semana</li><li>Curso "Empieza aquí"</li><li>Todas las calculadoras</li><li>Glosario</li></ul>
+        <a href="#suscribir" class="btn ghost">Suscribirme gratis</a>
+      </div>
+      <div class="card plan feat"><span class="ribbon">Recomendado</span>
+        <h3>Premium</h3><div class="price">2,50 €<small> / mes</small></div><p class="muted">o 24 €/año: ahorras 6 €.</p>
+        <ul><li>Todo lo del plan gratis</li><li><b>Comparativa mensual</b> de fondos indexados y ETFs</li><li>Resumen mensual del mercado</li><li>Análisis a fondo cada mes</li><li>Plantillas y recursos descargables</li></ul>
+        <a href="#premium" class="btn">Ver qué incluye Premium →</a>
+      </div>
+    </div>
+  </div>
+
+  
+</section>
+
+<!-- ============ APRENDE ============ -->
+<section class="page" id="p-aprende">
+  <span class="tag">Curso gratis</span>
+  <h1>Empieza aquí</h1>
+  <p class="lead muted">Cinco lecciones de 3-5 minutos para entender las bases. Al final de cada una hay un mini test.</p>
+  <div class="card">
+    <b>Tu progreso</b>
+    <div class="progress"><div id="prog-bar"></div></div>
+    <small class="muted" id="prog-txt">0 de 5 lecciones</small>
+  </div>
+  <div class="lesson-list" id="lesson-list"></div>
+</section>
+
+<!-- lesson container -->
+<section class="page" id="p-leccion"><div class="lesson-body" id="lesson-body"></div></section>
+
+<!-- ============ HERRAMIENTAS ============ -->
+<section class="page" id="p-herramientas">
+  <span class="tag">Gratis</span>
+  <h1>Herramientas</h1>
+  <p class="lead muted">Haz números con tu situación. Todo se calcula en tu navegador: no guardamos nada.</p>
+  <div class="tool-tabs">
+    <button class="on" data-t="compuesto">Interés compuesto</button>
+    <button data-t="presupuesto">Presupuesto 50/30/20</button>
+    <button data-t="comisiones">Impacto de las comisiones</button>
+  </div>
+
+  <!-- compuesto -->
+  <div class="tool on card" id="t-compuesto">
+    <div class="grid g2">
+      <div class="fields">
+        <h3>¿Cuánto tendré?</h3>
+        <label>Ahorro inicial (€)<input type="number" id="c-ini" value="500" min="0"></label>
+        <label>Aportación mensual (€)<input type="number" id="c-mes" value="50" min="0"></label>
+        <label>Años<input type="number" id="c-anos" value="30" min="1" max="60"></label>
+        <label>Rentabilidad anual estimada (%)<input type="number" id="c-rent" value="6" step="0.5" min="0" max="15"></label>
+      </div>
+      <div>
+        <div class="result">
+          <div class="stat"><small>Tendrías</small><b id="c-total">—</b></div>
+          <div class="stat"><small>Has aportado</small><b id="c-aport">—</b></div>
+          <div class="stat gold"><small>Ganado por intereses</small><b id="c-int">—</b></div>
+        </div>
+        <svg class="chart" id="c-chart" viewBox="0 0 400 220"></svg>
+        <div class="legend"><span><i style="background:#1d3a68"></i>Lo que aportas</span><span><i style="background:#b8913f"></i>Intereses generados</span></div>
+      </div>
+    </div>
+    <p class="disclaimer">Cálculo ilustrativo con capitalización mensual y rentabilidad constante. En la realidad la rentabilidad varía cada año y puede ser negativa. No incluye impuestos, comisiones ni inflación.</p>
+  </div>
+
+  <!-- presupuesto -->
+  <div class="tool card" id="t-presupuesto">
+    <div class="grid g2">
+      <div class="fields">
+        <h3>Reparte tu dinero</h3>
+        <p class="muted" style="margin:0">Beca, paga, trabajo a tiempo parcial… mete lo que te entra cada mes.</p>
+        <label>Ingresos mensuales (€)<input type="number" id="p-ing" value="600" min="0"></label>
+      </div>
+      <div>
+        <div class="bars" id="p-bars"></div>
+        <div class="callout" style="margin-top:20px"><b>La regla 50/30/20:</b> 50 % para necesidades (alquiler, comida, transporte), 30 % para caprichos (ocio, ropa, suscripciones) y 20 % para ahorrar o invertir. Es una guía, no una ley: si vives con tus padres, intenta subir el ahorro.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- comisiones -->
+  <div class="tool card" id="t-comisiones">
+    <div class="grid g2">
+      <div class="fields">
+        <h3>¿Cuánto te cuesta pagar más comisión?</h3>
+        <label>Aportación mensual (€)<input type="number" id="f-mes" value="100" min="0"></label>
+        <label>Años<input type="number" id="f-anos" value="30" min="1" max="60"></label>
+        <label>Rentabilidad bruta anual (%)<input type="number" id="f-rent" value="7" step="0.5"></label>
+        <label>Comisión producto A (%)<input type="number" id="f-a" value="1.5" step="0.05"></label>
+        <label>Comisión producto B (%)<input type="number" id="f-b" value="0.2" step="0.05"></label>
+      </div>
+      <div>
+        <div class="result">
+          <div class="stat"><small>Con comisión A</small><b id="f-ra">—</b></div>
+          <div class="stat"><small>Con comisión B</small><b id="f-rb">—</b></div>
+          <div class="stat gold"><small>Diferencia</small><b id="f-dif">—</b></div>
+        </div>
+        <div class="bars" id="f-bars"></div>
+        <div class="callout gold" style="margin-top:20px" id="f-msg"></div>
+      </div>
+    </div>
+    <p class="disclaimer">Simplificación: la comisión se resta de la rentabilidad cada año. Productos A y B genéricos, solo para comparar el efecto de los costes.</p>
+  </div>
+</section>
+
+<!-- ============ GLOSARIO ============ -->
+<section class="page" id="p-glosario">
+  <span class="tag">Diccionario</span>
+  <h1>Glosario</h1>
+  <p class="lead muted">Las palabras del mundo financiero, explicadas en una frase.</p>
+  <input class="search" id="g-search" placeholder="Busca un término… (ej. ETF)">
+  <div class="grid g2" id="g-list"></div>
+</section>
+
+<!-- ============ PREMIUM ============ -->
+<section class="page" id="p-premium">
+  <div class="center" style="max-width:700px;margin:0 auto">
+    <span class="tag eyebrow">Crescora Premium</span>
+    <h1>Por menos que un café al mes</h1>
+    <p class="lead muted">El plan gratis te enseña a empezar. Premium te acompaña <b>cada mes</b> con datos ordenados, comparativas y análisis, para que sigas aprendiendo sin perder horas buscando.</p>
+    <div class="toggle" role="tablist"><button class="on" data-b="m">Mensual</button><button data-b="a">Anual · ahorra 6 €</button></div>
+    <div class="price" id="pr-price">2,50 €<small> / mes</small></div>
+    <p class="muted" id="pr-note">Cancela cuando quieras.</p>
+    <a href="#suscribir" class="btn" style="margin-top:8px">Hazte Premium</a>
+  </div>
+
+  <div class="section">
+    <h2 class="center">Qué recibes cada mes</h2>
+    <p class="center muted">Además de la newsletter gratuita de cada semana.</p>
+    <div class="month" style="margin-top:24px">
+      <div class="card"><small>Semana 1</small><h3 style="margin-top:6px">Comparativa de fondos y ETFs</h3><p class="muted" style="margin:0">Una tabla actualizada con costes (TER), índice que siguen, rentabilidad pasada y dónde se pueden contratar.</p></div>
+      <div class="card"><small>Semana 2</small><h3 style="margin-top:6px">El mes en los mercados</h3><p class="muted" style="margin:0">Qué ha pasado y por qué importa, explicado sin tecnicismos en 5 minutos.</p></div>
+      <div class="card"><small>Semana 3</small><h3 style="margin-top:6px">Análisis a fondo</h3><p class="muted" style="margin:0">Un tema en profundidad: fiscalidad de la inversión en España, brokers, roboadvisors, planes de pensiones…</p></div>
+      <div class="card"><small>Semana 4</small><h3 style="margin-top:6px">Recurso descargable</h3><p class="muted" style="margin:0">Plantillas de presupuesto, checklist para elegir un fondo, guía para tu Erasmus…</p></div>
+    </div>
+  </div>
+
+  <div class="grid g2 section" style="align-items:start">
+    <div class="card">
+      <h3>Gratis vs Premium</h3>
+      <table class="cmp">
+        <tr><th></th><th>Gratis</th><th>Premium</th></tr>
+        <tr><td>Newsletter semanal</td><td class="y">✓</td><td class="y">✓</td></tr>
+        <tr><td>Curso "Empieza aquí"</td><td class="y">✓</td><td class="y">✓</td></tr>
+        <tr><td>Calculadoras y glosario</td><td class="y">✓</td><td class="y">✓</td></tr>
+        <tr><td>Comparativa mensual de fondos y ETFs</td><td class="no">—</td><td class="y">✓</td></tr>
+        <tr><td>Resumen mensual del mercado</td><td class="no">—</td><td class="y">✓</td></tr>
+        <tr><td>Análisis a fondo</td><td class="no">—</td><td class="y">✓</td></tr>
+        <tr><td>Plantillas descargables</td><td class="no">—</td><td class="y">✓</td></tr>
+        <tr><td>Archivo completo de números</td><td class="no">—</td><td class="y">✓</td></tr>
+      </table>
+    </div>
+    <div class="card preview">
+      <h3>Así es la comparativa mensual</h3>
+      <table>
+        <tr><th>Producto</th><th>Índice</th><th>TER</th><th>Tipo</th></tr>
+        <tr><td>Fondo indexado A</td><td>Global</td><td>0,12 %</td><td>Fondo</td></tr>
+        <tr><td>ETF B</td><td>EE. UU.</td><td>0,07 %</td><td>ETF</td></tr>
+        <tr><td>Fondo indexado C</td><td>Europa</td><td>0,15 %</td><td>Fondo</td></tr>
+        <tr><td>ETF D</td><td>Emergentes</td><td>0,18 %</td><td>ETF</td></tr>
+        <tr><td>Fondo indexado E</td><td>Global</td><td>0,20 %</td><td>Fondo</td></tr>
+      </table>
+      <div class="fade"><a href="#suscribir" class="btn small">Desbloquear con Premium</a></div>
+      <p class="muted" style="font-size:.8rem;margin-top:8px">Ejemplo ilustrativo con datos ficticios.</p>
+    </div>
+  </div>
+
+  <div class="section" style="max-width:760px;margin-left:auto;margin-right:auto">
+    <h2 class="center">Preguntas frecuentes</h2>
+    <details><summary>¿Puedo cancelar cuando quiera?</summary><p>Sí. Te das de baja con un clic desde cualquier correo, sin permanencia.</p></details>
+    <details><summary>¿Por qué pagar si hay información gratis en internet?</summary><p>Porque está dispersa, desordenada y muchas veces la escribe alguien que quiere venderte algo. Premium te lo da todo ordenado, actualizado y explicado claro, cada mes, en pocos minutos.</p></details>
+    <details><summary>¿Me vais a decir en qué invertir?</summary><p>No. Crescora Capital es un proyecto educativo: comparamos y explicamos cómo funcionan los productos, pero nunca hacemos recomendaciones personalizadas. Las decisiones son tuyas.</p></details>
+    <details><summary>¿Cómo se paga?</summary><p>Con tarjeta, de forma segura a través de la plataforma de la newsletter. Puedes elegir pago mensual o anual.</p></details>
+  </div>
+  <p class="disclaimer center">Contenido informativo y educativo. Crescora Capital no presta asesoramiento financiero ni recomienda productos concretos.</p>
+</section>
+
+<!-- ============ SOBRE ============ -->
+<section class="page" id="p-sobre">
+  <div class="lesson-body">
+    <span class="tag">Sobre mí</span>
+    <h1>¿Por qué Crescora Capital?</h1>
+    <p><b>Crescora</b> une dos ideas: <i>cresco</i>, "yo crezco" en latín, y <i>ora</i>, "ahora". <b>Crece ahora.</b> Porque el patrimonio no se construye de golpe, sino paso a paso, con constancia y, sobre todo, con tiempo.</p>
+    <p>Soy <b>Pablo</b>, tengo 22 años y estudio Economía en Málaga. Creé Crescora porque a la mayoría de jóvenes nadie nos ha explicado cómo ahorrar, qué es un fondo indexado o por qué empezar a los 20 cambia tanto las cosas. La información está ahí, pero dispersa, llena de tecnicismos o de gente intentando venderte algo.</p>
+    <h2>Nuestra ventaja es el tiempo, no el dinero</h2>
+    <p>Con 20 años casi ninguno tenemos mucho dinero para invertir. Pero tenemos algo mucho más valioso: <b>tiempo</b>. 50 € al mes empezando a los 20 pueden valer más que 100 € al mes empezando a los 35. No hace falta ser rico para empezar; hace falta empezar pronto.</p>
+    <p>Aquí la idea es simple: <b>explicar las finanzas personales de forma clara, honesta y con números reales</b>, para que cada uno tome sus propias decisiones.</p>
+    <div class="callout"><b>Nuestra promesa:</b> nunca te diremos "compra esto". Explicamos cómo funcionan las cosas para que decidas tú.</div>
+  </div>
+</section>
+
+<!-- ============ LEGAL ============ -->
+<section class="page" id="p-legal">
+  <div class="lesson-body">
+    <h1>Aviso legal</h1>
+    <div class="callout gold"><b>Importante:</b> todo el contenido de Crescora Capital (web, newsletter y herramientas) tiene carácter exclusivamente <b>informativo y educativo</b>. No constituye asesoramiento financiero, fiscal ni de inversión, ni una recomendación personalizada para comprar o vender ningún producto. Crescora Capital no es una entidad registrada en la CNMV.</div>
+    <p>Invertir conlleva riesgos, incluida la pérdida del capital invertido. Las rentabilidades pasadas no garantizan rentabilidades futuras. Antes de tomar cualquier decisión, infórmate bien y, si lo necesitas, consulta con un profesional autorizado.</p>
+    <h2>Titular</h2>
+    <p class="muted">[Nombre y apellidos] · [NIF] · [Dirección] · [Email de contacto] — <i>completar antes de publicar</i>.</p>
+    <h2>Privacidad</h2>
+    <p class="muted">Los emails de suscripción se gestionan a través de la plataforma de newsletter [Beehiiv]. Solo se usan para enviar la newsletter. Puedes darte de baja en cualquier momento desde el enlace de cada correo. <i>Completar con una política de privacidad conforme al RGPD antes de publicar.</i></p>
+  </div>
+</section>
+
+<!-- newsletter band (always visible) -->
+<div class="band" id="suscribir">
+  <div class="grid g2" style="align-items:center">
+    <div>
+      <span class="tag" style="color:#d9b56a;border-color:#d9b56a">Newsletter gratuita</span>
+      <h2 style="margin-top:12px">Recibe cada domingo una lección en tu correo</h2>
+      <p style="margin:0">Un consejo de ahorro + un concepto de inversión. 5 minutos. Gratis, sin compromiso. Es la mejor forma de empezar.</p>
+    </div>
+    <div>
+      <!-- PEGA AQUÍ EL FORMULARIO DE BEEHIIV (Settings → Subscribe forms → embed) -->
+      <form class="sub-form" onsubmit="return subscribe(this)">
+        <input type="email" required placeholder="tu@email.com" aria-label="Email">
+        <button class="btn">Suscribirme gratis</button>
+      </form>
+      <div class="form-msg"></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> Crescora Capital · Crece ahora</span>
+    <span><a href="#legal">Aviso legal</a> · Contenido educativo, no asesoramiento financiero.</span>
+  </div>
+</footer>
+
+<script>
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const eur = n => new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
+const store = {
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+$('#yr').textContent = new Date().getFullYear();
+
+function subscribe(form){
+  const msg = form.nextElementSibling;
+  msg.textContent = '¡Gracias! (Prototipo: aquí se conectará el formulario de Beehiiv.)';
+  form.reset(); return false;
+}
+
+/* compound interest: monthly contributions, monthly compounding */
+function grow(ini, mes, anos, rentPct){
+  const rm = Math.pow(1+rentPct/100, 1/12) - 1;
+  let v = ini, aport = ini; const series=[{y:0,v,aport}];
+  for(let m=1;m<=anos*12;m++){ v = v*(1+rm) + mes; aport += mes; if(m%12===0) series.push({y:m/12,v,aport}); }
+  return {v, aport, series};
+}
+$('#hero-num').textContent = eur(grow(0,50,40,6).v);
+(function timeChart(){
+  const rm=Math.pow(1.06,1/12)-1, A=[],B=[]; let a=0,b=0;
+  for(let m=0;m<=480;m++){ if(m%12===0){A.push(a);B.push(b)} a=a*(1+rm)+(m<120?50:0); b=b*(1+rm)+(m>=120?50:0); }
+  const W=420,H=260,pl=44,pb=26,pt=10,max=50000, x=i=>pl+(W-pl-10)*i/40, y=v=>pt+(H-pt-pb)*(1-v/max);
+  let g='';for(let k=0;k<=5;k++){const v=k*10000;g+=`<line x1="${pl}" x2="${W-10}" y1="${y(v)}" y2="${y(v)}" stroke="#e2ddd2"/><text x="${pl-6}" y="${y(v)+4}" font-size="10" fill="#5a6375" text-anchor="end">${v/1000}k</text>`}
+  [0,10,20,30,40].forEach(i=>g+=`<text x="${x(i)}" y="${H-8}" font-size="10" fill="#5a6375" text-anchor="middle">${20+i} años</text>`);
+  g+=`<rect x="${x(0)}" y="${pt}" width="${x(10)-x(0)}" height="${H-pt-pb}" fill="#b8913f" opacity=".08"/>`;
+  const line=(arr,c)=>`<polyline points="${arr.map((v,i)=>x(i)+','+y(v)).join(' ')}" fill="none" stroke="${c}" stroke-width="3" stroke-linejoin="round"/>`;
+  $('#time-chart').innerHTML=g+line(B,'#0f1f3a')+line(A,'#b8913f')+`<text x="${x(5)}" y="${pt+16}" font-size="10" fill="#b8913f" text-anchor="middle">Ana aporta</text>`;
+})();
+$$('.toggle button').forEach(b=>b.onclick=()=>{
+  $$('.toggle button').forEach(x=>x.classList.toggle('on',x===b));
+  const an=b.dataset.b==='a';
+  $('#pr-price').innerHTML=an?'24 €<small> / año</small>':'2,50 €<small> / mes</small>';
+  $('#pr-note').textContent=an?'Equivale a 2 € al mes: ahorras 6 € al año.':'Cancela cuando quieras.';
+});
+
+/* ---------- lessons ---------- */
+const LESSONS = [
+{t:'Por qué ahorrar (y por qué cuanto antes, mejor)', min:3, html:`
+<p>Ahorrar no es "no gastar". Es <b>pagarte a ti mismo primero</b>: reservar una parte de lo que entra antes de gastar el resto.</p>
+<h2>Tres razones para empezar ya</h2>
+<p><b>1. Tranquilidad.</b> Un imprevisto (el móvil se rompe, una multa, un viaje de última hora) deja de ser un drama si tienes un colchón.</p>
+<p><b>2. Libertad.</b> El dinero ahorrado te da opciones: irte de Erasmus, cambiar de piso, aceptar unas prácticas mal pagadas pero que te interesan.</p>
+<p><b>3. El tiempo.</b> Es tu mayor ventaja. Gracias al interés compuesto (lo vemos en la lección 4), 50 € al mes desde los 20 pueden valer más que 100 € al mes desde los 35.</p>
+<div class="callout"><b>El truco que más funciona:</b> automatizarlo. Programa una transferencia a otra cuenta el mismo día que cobras. Lo que no ves, no lo gastas.</div>
+<h2>¿Y la inflación?</h2>
+<p>La inflación es la subida general de precios. Si los precios suben un 3 % al año y tu dinero está quieto en la cuenta, cada año compra un 3 % menos. Por eso, además de ahorrar, a largo plazo interesa que ese dinero <b>crezca</b>.</p>`,
+quiz:[
+ {q:'¿Qué significa "pagarte a ti mismo primero"?', o:['Gastar en ti antes que en otros','Apartar el ahorro antes de gastar el resto','Cobrar antes que tus amigos'], a:1},
+ {q:'Si tu dinero está parado y hay inflación del 3 %…', o:['Pierde poder de compra','Gana un 3 %','No pasa nada'], a:0}
+]},
+{t:'Cómo hacer tu presupuesto: la regla 50/30/20', min:4, html:`
+<p>Un presupuesto no es una cárcel: es un <b>mapa</b> de a dónde va tu dinero. La forma más sencilla de empezar es la regla 50/30/20.</p>
+<table><tr><th>%</th><th>Para qué</th><th>Ejemplos</th></tr>
+<tr><td><b>50 %</b></td><td>Necesidades</td><td>Alquiler, comida, transporte, facturas</td></tr>
+<tr><td><b>30 %</b></td><td>Deseos</td><td>Salir, ropa, viajes, suscripciones</td></tr>
+<tr><td><b>20 %</b></td><td>Ahorro e inversión</td><td>Fondo de emergencia, inversión</td></tr></table>
+<h2>Versión estudiante</h2>
+<p>Si vives con tus padres y no pagas alquiler, tus "necesidades" serán menos del 50 %. Aprovecha: <b>sube el ahorro</b> al 30 % o 40 %. Pocas veces en la vida será tan fácil.</p>
+<div class="callout gold"><b>Ejercicio:</b> apunta todo lo que gastas durante 2 semanas (una nota del móvil vale). Casi todo el mundo descubre un "agujero": delivery, suscripciones que no usa, cafés…</div>
+<p>Prueba la <a href="#herramientas">calculadora 50/30/20</a> con tus números.</p>`,
+quiz:[
+ {q:'En la regla 50/30/20, ¿qué parte va al ahorro?', o:['50 %','30 %','20 %'], a:2},
+ {q:'Netflix, Spotify y salir de fiesta son…', o:['Necesidades','Deseos','Ahorro'], a:1}
+]},
+{t:'El fondo de emergencia: cuánto y dónde', min:4, html:`
+<p>Antes de invertir un solo euro, necesitas un <b>fondo de emergencia</b>: dinero apartado solo para imprevistos.</p>
+<h2>¿Cuánto?</h2>
+<p>La referencia habitual es <b>entre 3 y 6 meses de tus gastos</b>. Si eres estudiante y vives con tu familia, puedes empezar con un objetivo más pequeño, por ejemplo 500-1.000 €, e ir subiéndolo.</p>
+<h2>¿Dónde?</h2>
+<p>Tiene que estar <b>disponible rápido y sin riesgo</b>. Por eso no se invierte en bolsa: si hay una caída justo cuando lo necesitas, tendrías que vender perdiendo.</p>
+<ul><li><b>Cuenta remunerada</b> o de ahorro separada de la del día a día.</li>
+<li><b>Depósitos</b> a corto plazo, si no vas a necesitarlo en unos meses.</li></ul>
+<div class="callout">En España, el <b>Fondo de Garantía de Depósitos</b> cubre hasta 100.000 € por titular y entidad si un banco quiebra.</div>
+<h2>¿Por qué antes de invertir?</h2>
+<p>Porque así nunca te verás obligado a vender tus inversiones en mal momento. El fondo de emergencia es lo que te permite invertir con calma.</p>`,
+quiz:[
+ {q:'¿Dónde NO deberías tener el fondo de emergencia?', o:['Cuenta remunerada','Invertido en acciones','Depósito a corto plazo'], a:1},
+ {q:'La referencia habitual para el fondo de emergencia es…', o:['1 semana de gastos','3-6 meses de gastos','5 años de gastos'], a:1}
+]},
+{t:'El interés compuesto: la magia del tiempo', min:4, html:`
+<p>Einstein (supuestamente) lo llamó la octava maravilla del mundo. El <b>interés compuesto</b> significa ganar intereses sobre tus intereses.</p>
+<h2>Un ejemplo sencillo</h2>
+<p>Inviertes 1.000 € y ganan un 7 % al año:</p>
+<table><tr><th>Año</th><th>Valor</th></tr><tr><td>0</td><td>1.000 €</td></tr><tr><td>10</td><td>~1.967 €</td></tr><tr><td>20</td><td>~3.870 €</td></tr><tr><td>30</td><td>~7.612 €</td></tr><tr><td>40</td><td>~14.974 €</td></tr></table>
+<p>Fíjate: en los primeros 10 años ganas ~1.000 €. Entre el año 30 y el 40, más de 7.000 €. <b>La bola de nieve crece cada vez más rápido.</b></p>
+<h2>La lección clave</h2>
+<div class="callout gold">Empezar pronto importa más que aportar mucho. El tiempo es el ingrediente que no se puede comprar.</div>
+<p>Juega con la <a href="#herramientas">calculadora de interés compuesto</a> y cambia los años: verás el efecto.</p>
+<p class="muted" style="font-size:.9rem">Las cifras son ilustrativas con una rentabilidad constante. En la realidad, las inversiones suben y bajan, y algunos años pierden dinero.</p>`,
+quiz:[
+ {q:'El interés compuesto consiste en…', o:['Ganar intereses sobre los intereses','Pagar dos veces de comisión','Un tipo de préstamo'], a:0},
+ {q:'¿Qué factor tiene más efecto a largo plazo?', o:['El banco que elijas','El tiempo que dejas crecer el dinero','El día de la semana en que inviertes'], a:1}
+]},
+{t:'Fondos indexados vs ETFs: en qué se diferencian', min:5, html:`
+<p>Ambos permiten invertir en <b>cientos o miles de empresas a la vez</b> con poco dinero, copiando un índice (por ejemplo el <b>MSCI World</b>, con grandes empresas de países desarrollados, o el <b>S&P 500</b>, con 500 grandes empresas de EE. UU.).</p>
+<p>No intentan "ganar al mercado": lo replican. A cambio, sus <b>comisiones son muy bajas</b>.</p>
+<h2>Las diferencias</h2>
+<table><tr><th></th><th>Fondo indexado</th><th>ETF</th></tr>
+<tr><td>Cómo se compra</td><td>En una gestora, banco o roboadvisor</td><td>En bolsa, a través de un broker</td></tr>
+<tr><td>Precio</td><td>Una vez al día (valor liquidativo)</td><td>En tiempo real, como una acción</td></tr>
+<tr><td>Traspasos (España)</td><td><b>Sí</b>: puedes cambiar de fondo sin pagar impuestos hasta que vendas</td><td>No: cambiar de ETF implica vender y tributar</td></tr>
+<tr><td>Aportaciones periódicas</td><td>Muy cómodas, a menudo automáticas</td><td>Depende del broker</td></tr></table>
+<div class="callout"><b>La clave en España:</b> la posibilidad de traspasar fondos sin tributar es una ventaja fiscal importante a largo plazo, y es una de las razones por las que muchos inversores particulares españoles usan fondos indexados.</div>
+<h2>Qué mirar siempre</h2>
+<ul><li><b>TER o gastos corrientes:</b> lo que te cobran al año. En indexados suele ser muy bajo.</li>
+<li><b>Qué índice sigue</b> y cuánto se diversifica.</li>
+<li><b>Comisiones del broker o plataforma</b> (custodia, compra, venta).</li></ul>
+<p class="muted" style="font-size:.9rem">Contenido educativo, no una recomendación. Cada producto tiene sus riesgos: el valor puede bajar y puedes perder dinero.</p>`,
+quiz:[
+ {q:'¿Qué hace un fondo indexado?', o:['Elige las mejores acciones','Replica un índice','Garantiza rentabilidad'], a:1},
+ {q:'En España, ¿qué ventaja fiscal tienen los fondos frente a los ETFs?', o:['No pagan nunca impuestos','Se pueden traspasar sin tributar','No tienen comisiones'], a:1}
+]}
+];
+
+function done(){return store.get('crescora_done',[])}
+function renderLessons(){
+  const d = done();
+  $('#prog-bar').style.width = (d.length/LESSONS.length*100)+'%';
+  $('#prog-txt').textContent = `${d.length} de ${LESSONS.length} lecciones completadas`;
+  $('#lesson-list').innerHTML = LESSONS.map((l,i)=>`
+    <a class="card lesson-item ${d.includes(i)?'done':''}" href="#leccion-${i+1}">
+      <span class="num">${d.includes(i)?'✓':i+1}</span>
+      <span><b>${l.t}</b><br><small class="muted">${l.min} min de lectura</small></span>
+    </a>`).join('');
+}
+function renderLesson(i){
+  const l = LESSONS[i];
+  $('#lesson-body').innerHTML = `
+    <a href="#aprende" class="muted">← Volver al curso</a>
+    <p style="margin-top:16px"><span class="tag">Lección ${i+1} de ${LESSONS.length} · ${l.min} min</span></p>
+    <h1>${l.t}</h1>${l.html}
+    <div class="card quiz"><h3>Mini test</h3>
+      ${l.quiz.map((q,qi)=>`<div class="q"><b>${qi+1}. ${q.q}</b>${q.o.map((o,oi)=>`<label><input type="radio" name="q${qi}" value="${oi}">${o}</label>`).join('')}</div>`).join('')}
+      <button class="btn" id="quiz-check">Comprobar</button> <span id="quiz-msg" style="margin-left:10px;font-weight:600"></span>
+    </div>
+    <div class="lesson-nav">
+      ${i>0?`<a class="btn ghost" href="#leccion-${i}">← Anterior</a>`:'<span></span>'}
+      ${i<LESSONS.length-1?`<a class="btn" href="#leccion-${i+2}">Siguiente lección →</a>`:`<a class="btn" href="#herramientas">Ir a las herramientas →</a>`}
+    </div>`;
+  $('#quiz-check').onclick = ()=>{
+    let ok=0;
+    l.quiz.forEach((q,qi)=>{
+      $$(`input[name=q${qi}]`).forEach(inp=>{
+        const lab=inp.parentElement; lab.classList.remove('ok','ko');
+        if(+inp.value===q.a) lab.classList.add('ok');
+        else if(inp.checked) lab.classList.add('ko');
+      });
+      const s=$(`input[name=q${qi}]:checked`); if(s && +s.value===q.a) ok++;
+    });
+    if(ok===l.quiz.length){
+      $('#quiz-msg').textContent='¡Perfecto! Lección completada ✓';
+      const d=done(); if(!d.includes(i)){d.push(i);store.set('crescora_done',d)}
+    } else $('#quiz-msg').textContent=`${ok}/${l.quiz.length} correctas. Revisa y vuelve a intentarlo.`;
+  };
+}
+
+/* ---------- tools ---------- */
+$$('.tool-tabs button').forEach(b=>b.onclick=()=>{
+  $$('.tool-tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  $$('.tool').forEach(t=>t.classList.toggle('on',t.id==='t-'+b.dataset.t));
+});
+const num = id => Math.max(0, parseFloat($(id).value)||0);
+
+function calcCompound(){
+  const anos = Math.min(60, Math.max(1, num('#c-anos')));
+  const r = grow(num('#c-ini'), num('#c-mes'), anos, num('#c-rent'));
+  $('#c-total').textContent = eur(r.v); $('#c-aport').textContent = eur(r.aport); $('#c-int').textContent = eur(r.v-r.aport);
+  const W=400,H=220,pl=46,pb=24,pt=10, max=Math.max(r.v,1), n=r.series.length-1||1;
+  const x=i=>pl+(W-pl-8)*i/n, y=v=>pt+(H-pt-pb)*(1-v/max);
+  const top=r.series.map((s,i)=>`${x(i)},${y(s.v)}`).join(' ');
+  const mid=r.series.map((s,i)=>`${x(i)},${y(s.aport)}`).join(' ');
+  const base=`${x(n)},${y(0)} ${x(0)},${y(0)}`;
+  const midRev=r.series.map((s,i)=>`${x(i)},${y(s.aport)}`).reverse().join(' ');
+  let grid=''; for(let k=0;k<=4;k++){const v=max*k/4;grid+=`<line x1="${pl}" x2="${W-8}" y1="${y(v)}" y2="${y(v)}" stroke="#e2ddd2"/><text x="${pl-6}" y="${y(v)+4}" font-size="10" fill="#5a6375" text-anchor="end">${v>=1000?Math.round(v/1000)+'k':Math.round(v)}</text>`}
+  const step=Math.max(1,Math.ceil(n/6)); let xl='';
+  r.series.forEach((s,i)=>{if(i%step===0||i===n) xl+=`<text x="${x(i)}" y="${H-6}" font-size="10" fill="#5a6375" text-anchor="middle">${s.y}a</text>`});
+  $('#c-chart').innerHTML = grid+xl+
+    `<polygon points="${top} ${midRev}" fill="#b8913f" opacity=".85"/>`+
+    `<polygon points="${mid} ${base}" fill="#1d3a68" opacity=".9"/>`;
+}
+function calcBudget(){
+  const ing=num('#p-ing');
+  const rows=[['Necesidades',.5,'#0f1f3a'],['Deseos',.3,'#b8913f'],['Ahorro',.2,'#1d3a68']];
+  $('#p-bars').innerHTML = rows.map(([n,p,c])=>`<div class="bar-row"><span>${n} (${p*100}%)</span><div class="track"><div class="fill" style="width:${p*100/0.5*50}%;background:${c}"></div></div><b>${eur(ing*p)}</b></div>`).join('')+
+   `<p class="muted" style="margin-top:14px">Ahorrando el 20 % durante un año juntarías <b style="color:var(--green)">${eur(ing*.2*12)}</b>.</p>`;
+}
+function calcFees(){
+  const mes=num('#f-mes'), anos=Math.min(60,Math.max(1,num('#f-anos'))), g=parseFloat($('#f-rent').value)||0;
+  const a=grow(0,mes,anos,g-num('#f-a')).v, b=grow(0,mes,anos,g-num('#f-b')).v, dif=Math.abs(b-a), mx=Math.max(a,b,1);
+  $('#f-ra').textContent=eur(a); $('#f-rb').textContent=eur(b); $('#f-dif').textContent=eur(dif);
+  $('#f-bars').innerHTML=[['Comisión A',a,'#b8913f'],['Comisión B',b,'#1d3a68']].map(([n,v,c])=>`<div class="bar-row"><span>${n}</span><div class="track"><div class="fill" style="width:${v/mx*100}%;background:${c}"></div></div><b>${eur(v)}</b></div>`).join('');
+  $('#f-msg').innerHTML=`Una diferencia de <b>${Math.abs(num('#f-a')-num('#f-b')).toFixed(2).replace('.',',')} puntos</b> de comisión supone <b>${eur(dif)}</b> en ${anos} años. Las comisiones, como los intereses, también se acumulan.`;
+}
+['#c-ini','#c-mes','#c-anos','#c-rent'].forEach(s=>$(s).addEventListener('input',calcCompound));
+$('#p-ing').addEventListener('input',calcBudget);
+['#f-mes','#f-anos','#f-rent','#f-a','#f-b'].forEach(s=>$(s).addEventListener('input',calcFees));
+calcCompound(); calcBudget(); calcFees();
+
+/* ---------- glossary ---------- */
+const GLOS = [
+['Acción','Una pequeña parte de una empresa. Si compras una acción, eres (un poquito) dueño de ella.'],
+['Bono','Un préstamo que haces a un gobierno o empresa a cambio de un interés.'],
+['Broker','Plataforma o intermediario que te permite comprar y vender acciones, ETFs y otros activos.'],
+['Diversificación','No poner todos los huevos en la misma cesta: repartir el dinero entre muchos activos para reducir el riesgo.'],
+['Dividendo','Parte de los beneficios que una empresa reparte entre sus accionistas.'],
+['ETF','Fondo que cotiza en bolsa como una acción y que normalmente replica un índice.'],
+['Fondo de emergencia','Dinero apartado solo para imprevistos, disponible rápido y sin riesgo.'],
+['Fondo indexado','Fondo de inversión que replica un índice con comisiones bajas.'],
+['Índice','Conjunto de empresas que representa un mercado, como el S&P 500, el MSCI World o el IBEX 35.'],
+['Inflación','La subida general de los precios. Hace que tu dinero parado compre cada vez menos.'],
+['Interés compuesto','Ganar intereses sobre los intereses que ya has ganado. La bola de nieve del ahorro.'],
+['MSCI World','Índice con grandes y medianas empresas de países desarrollados de todo el mundo.'],
+['Rentabilidad','Lo que gana (o pierde) una inversión, normalmente en % al año.'],
+['Riesgo','La posibilidad de que una inversión valga menos de lo esperado, o de perder dinero.'],
+['Roboadvisor','Servicio automático que invierte tu dinero en una cartera de fondos según tu perfil.'],
+['S&P 500','Índice con las 500 mayores empresas cotizadas de Estados Unidos.'],
+['TER','Gastos corrientes anuales de un fondo o ETF, en %. Cuanto más bajo, más te queda a ti.'],
+['Traspaso','En España, cambiar el dinero de un fondo a otro sin pagar impuestos hasta que vendas.'],
+['Valor liquidativo','El precio de una participación de un fondo, que se calcula una vez al día.'],
+['Volatilidad','Cuánto sube y baja el precio de una inversión. Más volatilidad, más montaña rusa.']
+];
+function renderGlos(f=''){
+  const q=f.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const items=GLOS.filter(([t,d])=>(t+' '+d).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').includes(q));
+  $('#g-list').innerHTML = items.length? items.map(([t,d])=>`<div class="card term"><h3>${t}</h3><p class="muted" style="margin:0">${d}</p></div>`).join('') : '<p class="muted">No hay resultados.</p>';
+}
+$('#g-search').addEventListener('input',e=>renderGlos(e.target.value)); renderGlos();
+
+/* ---------- router ---------- */
+function route(){
+  const h=(location.hash||'#inicio').slice(1);
+  if(h==='suscribir') return;
+  let page=h, m=h.match(/^leccion-(\d+)$/);
+  if(m){ const i=+m[1]-1; if(LESSONS[i]){renderLesson(i);page='leccion'} else page='aprende'; }
+  if(!$('#p-'+page)) page='inicio';
+  if(page==='aprende') renderLessons();
+  $$('section.page').forEach(s=>s.classList.toggle('active',s.id==='p-'+page));
+  $$('.links a[data-r]').forEach(a=>a.classList.toggle('on',a.dataset.r===page||(page==='leccion'&&a.dataset.r==='aprende')));
+  $('.links').classList.remove('open');
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route); route();
+</script>
+</body>
+</html>
